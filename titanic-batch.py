@@ -1,7 +1,8 @@
 import os
 import modal
-    
+#import sklearn
 LOCAL=True
+
 #mire model train shode ro migire va run mikone as hopsworks
 if LOCAL == False:
    stub = modal.Stub()
@@ -22,48 +23,56 @@ def g():
     from matplotlib import pyplot
     import seaborn as sns
     import requests
+    import io
+
 
     project = hopsworks.login()
     fs = project.get_feature_store()
     
     mr = project.get_model_registry()
-    model = mr.get_model("titan_modal", version=53)
+    model = mr.get_model("titanic_modal", version=1)#/?????????????????????????????????
     model_dir = model.download()
+
     model = joblib.load(model_dir + "/titanic_model.pkl")
     
-    feature_view = fs.get_feature_view(name="titan_modal", version=53)
+    feature_view = fs.get_feature_view(name="titanic_modal", version=55)#??????????????????????????????????????
     batch_data = feature_view.get_batch_data()
     
     y_pred = model.predict(batch_data)
     #print(y_pred)
     offset = 1
-    flower = y_pred[y_pred.size-offset]
-    flower_url = "https://raw.githubusercontent.com/featurestoreorg/serverless-ml-course/main/src/01-module/assets/" + flower + ".png"
-    print("Flower predicted: " + flower)
-    img = Image.open(requests.get(flower_url, stream=True).raw)            
-    img.save("./latest_iris.png")
-    dataset_api = project.get_dataset_api()    
-    dataset_api.upload("./latest_iris.png", "Resources/images", overwrite=True)
-   
-    iris_fg = fs.get_feature_group(name="titan_modal", version=53)
-    df = iris_fg.read() 
-    #print(df)
-    label = df.iloc[-offset]["variety"]
-    label_url = "https://raw.githubusercontent.com/featurestoreorg/serverless-ml-course/main/src/01-module/assets/" + label + ".png"
-    print("Flower actual: " + label)
-    img = Image.open(requests.get(label_url, stream=True).raw)            
-    img.save("./actual_iris.png")
-    dataset_api.upload("./actual_iris.png", "Resources/images", overwrite=True)
+    passenger = y_pred[y_pred.size-offset]
     
-    monitor_fg = fs.get_or_create_feature_group(name="iris_predictions",
-                                                version=53,
+    passenger_url = str(passenger)+".png"
+    img = Image.open(r"C:/Users/User/Documents/Images_SML/"+passenger_url)
+    
+    #without change:
+    img.save("./latest_titanic.png")
+    
+    dataset_api = project.get_dataset_api()    
+    dataset_api.upload("./latest_titanic.png", "Resources/images", overwrite=True)
+   
+    titanic_fg = fs.get_feature_group(name="titanic_modal", version=55)#???????????????????????????????????????
+    df = titanic_fg.read() 
+    #print(df)
+    label = df.iloc[-offset]["survived"]
+    
+    label_url = str(int(label))+".png"
+    img = Image.open(r"C:/Users/User/Documents/Images_SML/"+label_url)
+    
+    
+    img.save("./actual_titanic.png")
+    dataset_api.upload("./actual_titanic.png", "Resources/images", overwrite=True)
+    
+    monitor_fg = fs.get_or_create_feature_group(name="titanic_predictions",
+                                                version=1,
                                                 primary_key=["datetime"],
                                                 description="Titanic Prediction/Outcome Monitoring"
                                                 )
     
     now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
     data = {
-        'prediction': [flower],
+        'prediction': [passenger],
         'label': [label],
         'datetime': [now],
        }
@@ -83,21 +92,22 @@ def g():
     predictions = history_df[['prediction']]
     labels = history_df[['label']]
 
-    # Only create the confusion matrix when our iris_predictions feature group has examples of all 3 iris flowers
-    print("Number of different flower predictions to date: " + str(predictions.value_counts().count()))
+    # Only create the confusion matrix when our titanic_predictions feature group has examples of all 2 Survived and does not Survived
+    print("Number of different passengers predictions to date: " + str(predictions.value_counts().count()))
     if predictions.value_counts().count() == 2:
         results = confusion_matrix(labels, predictions)
     
-        df_cm = pd.DataFrame(results, ['True Setosa', 'True Versicolor', 'True Virginica'],
-                             ['Pred Setosa', 'Pred Versicolor', 'Pred Virginica'])
+        df_cm = pd.DataFrame(results, ['True Survived', 'True not Survived'],
+                             ['Pred Survived', 'Pred not Survived'])
+        
     
         cm = sns.heatmap(df_cm, annot=True)
         fig = cm.get_figure()
         fig.savefig("./confusion_matrix.png")
         dataset_api.upload("./confusion_matrix.png", "Resources/images", overwrite=True)
     else:
-        print("You need 3 different flower predictions to create the confusion matrix.")
-        print("Run the batch inference pipeline more times until you get 3 different iris flower predictions") 
+        print("You need 2 different passenger predictions to create the confusion matrix.")
+        print("Run the batch inference pipeline more times until you get 2 different passenger predictions") 
 
 
 if __name__ == "__main__":
