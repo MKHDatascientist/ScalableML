@@ -17,7 +17,7 @@ def generate_flower(name):
     import pandas as pd
     import random
 
-    df = pd.DataFrame({ "PassengerId": 1,  #dONT FORGET
+    df = pd.DataFrame({ "PassengerId": 14,  #dONT FORGET
                        "Pclass": [random.randint(1,3)],
                        
                        "Numeric_sex":[random.randint(0,1)],
@@ -41,14 +41,14 @@ def get_random_iris_flower():
 
     # randomly pick one of these 3 and write it to the featurestore
     #pick_random = random.uniform(0,3)
-    pick_random=1
+    pick_random = 1           #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>SET BEFORE RUNNINGN
+   
     if pick_random == 1:
         iris_df = s
         print("Survived added")
     else:
         iris_df = nots
         print("Not survived added")
-    
 
     return iris_df
 
@@ -62,7 +62,7 @@ def g():
 
     titanic_df = get_random_iris_flower()
 
-    iris_fg = fs.get_feature_group(name="titan_modal",version=53)
+    iris_fg = fs.get_feature_group(name="titanic_modal",version=55)
     iris_fg.insert(titanic_df, write_options={"wait_for_job" : False})
 
 if __name__ == "__main__":
