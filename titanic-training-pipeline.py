@@ -33,12 +33,12 @@ def g():
     # The feature view is the input set of features for your model. The features can come from different feature groups.    
     # You can select features from different feature groups and join them together to create a feature view
     try: 
-        feature_view = fs.get_feature_view(name="titan_modal", version=53)
+        feature_view = fs.get_feature_view(name="titanic_modal", version=55)
     except:
-        iris_fg = fs.get_feature_group(name="titan_modal", version=53)
+        iris_fg = fs.get_feature_group(name="titanic_modal", version=55)
         query = iris_fg.select_all()
-        feature_view = fs.create_feature_view(name="titan_modal",
-                                          version=53,
+        feature_view = fs.create_feature_view(name="titanic_modal",
+                                          version=55,
                                           description="Read from Titanic dataset",
                                           labels=["Survived"],
                                           query=query)    
