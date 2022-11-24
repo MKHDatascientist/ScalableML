@@ -1,16 +1,18 @@
-# ScalableML
-Scalable Machine Learning Project - Lab1
+# Scalable Machine Learning Project - Lab1
 
 Maryam Kheirkhahzadeh, markhe@kth.se
 December 2022
 
 Subject
+
 Prediction survived or not survived for the titanic data set. In this project we create a feature group on hopsworks and then using a training application we will have a model on hopsworks. We use huggingface.co to connect to hopsworks.ai and predict an arbitrary record.
 
 Data set
+
 I have used the data set from this link: https://raw.githubusercontent.com/ID2223KTH/id2223kth.github.io/master/assignments/lab1/titanic.csv
 
 Data cleaning
+
 I have done this part using Google colab. Then I have used the cleaned dataset in titanic-feature-pipeline.py. I have cleaned the data by replacing male and female with 0 and 1 respectively, replacing nan values in pclass column with mean of the column and some other tasks.
 
 Uploading images
