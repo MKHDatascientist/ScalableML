@@ -22,12 +22,19 @@ I have uploaded two pictures for dead and survived situations on hopsworks inste
 Implementation
 
 We have passed these steps:
+
 1- Creating  accounts on Modal.com, hopsworks.ai and huggingface.co.
-2- Defining api-key in hopsworks
-3- Defining a secret key using this api-key in modals
-4- Creating feature group in hopsworks 
-5- Creating view and model and hopsworks
+
+2- Defining api-key in hopsworks.
+
+3- Defining a secret key using this api-key in modals.
+
+4- Creating feature group in hopsworks. 
+
+5- Creating view and model and hopsworks.
+
 6- Calling titanic-feature-daily.py and titanic-batch.py consequently.
+
 7- Defining two new name spaces in huggingface. One space for defining a user-interface which takes some parameters and predicts based on the titanic model. Another space is for demonstrating some features like confusion matrix.
 
 
