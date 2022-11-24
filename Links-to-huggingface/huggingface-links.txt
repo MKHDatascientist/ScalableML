@@ -1,0 +1,7 @@
+Huggingface monitoring file:
+File for demonstrating the last prediction and confusion matrix :
+https://huggingface.co/spaces/MaryDatascientist/titanic_monitor
+
+
+Huggingface prediction file:
+https://huggingface.co/spaces/MaryDatascientist/titanic_app
